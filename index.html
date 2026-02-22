@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Learning Portal | Interactive Labs & Scenarios</title>
+    <meta name="description"
+        content="An innovative, interactive platform designed to bridge the gap between theoretical knowledge and practical application in cybersecurity.">
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <a href="#home" class="nav-brand" id="home-logo"
+                style="text-decoration: none; color: inherit; cursor: pointer;">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <span>CyberSec Portal</span>
+            </a>
+            <div class="nav-links" style="display: none;">
+                <!-- User requested to remove the four tabs at the top middle -->
+            </div>
+            <div class="nav-actions" style="display: none;">
+                <!-- User requested to remove Log In and Start Learning buttons -->
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Hero Section -->
+            <section id="home" class="hero-section page-section active">
+                <div class="hero-content">
+                    <div class="badge">New: Advanced APT Simulator</div>
+                    <h1 class="hero-title">
+                        Master Cybersecurity Through <span class="text-gradient">Practical Application</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Bridge the gap between theoretical knowledge and real-world defense. Engage in simulated
+                        environments to practice security configurations, pentesting, and incident response safely.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#labs-menu" style="text-decoration: none;"><button
+                                class="btn btn-primary btn-large">Explore Labs</button></a>
+                        <a href="#curriculum" style="text-decoration: none;"><button
+                                class="btn btn-outline btn-large">View Curriculum</button></a>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-value">50+</span>
+                            <span class="stat-label">Interactive Labs</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Real-world</span>
+                            <span class="stat-label">Threat Scenarios</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">Adaptive</span>
+                            <span class="stat-label">Assessments</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="glass-panel main-visual-panel">
+                        <img src="assets/images/hero.png" alt="Cybersecurity Platform Visualization" class="hero-image">
+                        <div class="floating-badge badge-1">
+                            <div class="status-dot healthy"></div>
+                            <span>Network Secure</span>
+                        </div>
+                        <div class="floating-badge badge-2">
+                            <div class="status-dot warning"></div>
+                            <span>Analyzing Traffic</span>
+                        </div>
+                    </div>
+                    <!-- Background decorative elements -->
+                    <div class="glow-orb orb-1"></div>
+                    <div class="glow-orb orb-2"></div>
+                </div>
+            </section>
+
+            <!-- Curriculum Section -->
+            <section id="curriculum" class="features-section page-section">
+                <div class="section-header">
+                    <h2>Cybersecurity Curriculum</h2>
+                    <p>Essential notes, blogs, and fundamental concepts to build your knowledge base before diving into
+                        practical labs.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card glass-panel" style="cursor: default;">
+                        <span class="badge" style="margin-bottom: 15px; width: fit-content;">Blog Post</span>
+                        <h3>1. Fundamentals of Networking</h3>
+                        <p>Learn about OSI models, TCP/IP, and common protocols like HTTP, DNS, and FTP. Understanding
+                            how data travels is crucial for spotting anomalies and securing communications.</p>
+                        <a href="#" class="btn-text" style="margin-top: 15px;">Read Notes &rarr;</a>
+                    </div>
+                    <div class="feature-card glass-panel" style="cursor: default;">
+                        <span class="badge" style="margin-bottom: 15px; width: fit-content;">Study Notes</span>
+                        <h3>2. Malware & Attack Vectors</h3>
+                        <p>Explore the mechanics behind ransomware, trojans, worms, and phishing campaigns. Understand
+                            how adversaries gain initial access and establish persistence.</p>
+                        <a href="#" class="btn-text" style="margin-top: 15px;">Read Notes &rarr;</a>
+                    </div>
+                    <div class="feature-card glass-panel" style="cursor: default;">
+                        <span class="badge" style="margin-bottom: 15px; width: fit-content;">Blog Post</span>
+                        <h3>3. Defense in Depth Strategy</h3>
+                        <p>The core concept of applying multiple layers of security controls (Firewalls, IDS/IPS, MFA,
+                            Encryption) to protect critical data and enterprise information systems.</p>
+                        <a href="#" class="btn-text" style="margin-top: 15px;">Read Notes &rarr;</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="features-section page-section">
+                <div class="section-header">
+                    <h2>Core Learning Modules</h2>
+                    <p>Comprehensive training environments simulating modern cyber threats.</p>
+                </div>
+                <div class="features-grid">
+                    <!-- Feature 1: Labs -->
+                    <div class="feature-card glass-panel"
+                        onclick="document.querySelector('.hero-actions a[href=\'#labs-menu\']').click();">
+                        <div class="feature-icon-wrapper">
+                            <img src="assets/images/labs.png" alt="Interactive Labs Icon" class="feature-icon">
+                        </div>
+                        <h3>Interactive Labs</h3>
+                        <p>Engage in simulated environments to practice security configurations, penetration testing,
+                            and incident response safely.</p>
+                        <ul class="feature-list" style="margin-top:20px;">
+                            <li>&rarr; Real-world system replication</li>
+                            <li>&rarr; Zero-risk experimentation</li>
+                            <li>&rarr; Guided walkthroughs</li>
+                        </ul>
+                        <a href="#labs-menu" class="btn-text">Enter Labs &rarr;</a>
+                    </div>
+
+                    <!-- Feature 2: Threats -->
+                    <div class="feature-card glass-panel"
+                        onclick="document.querySelector('#scenarios-menu-btn').click();">
+                        <div class="feature-icon-wrapper">
+                            <img src="assets/images/threats.png" alt="Threat Scenarios Icon" class="feature-icon">
+                        </div>
+                        <h3>Threat Scenarios</h3>
+                        <p>Dynamic case studies and attack simulations, including phishing, ransomware, and DDoS events.
+                        </p>
+                        <ul class="feature-list" style="margin-top:20px;">
+                            <li>&rarr; Analyze live attack patterns</li>
+                            <li>&rarr; Detect advanced persistence</li>
+                            <li>&rarr; Build resilience strategies</li>
+                        </ul>
+                        <a href="#scenarios-menu" id="scenarios-menu-btn" class="btn-text">View Scenarios &rarr;</a>
+                    </div>
+
+                    <!-- Feature 3: Assessments -->
+                    <div class="feature-card glass-panel" data-target="assessments-view">
+                        <div class="feature-icon-wrapper">
+                            <img src="assets/images/assessment.png" alt="Assessment Models Icon" class="feature-icon">
+                        </div>
+                        <h3>Assessment Models</h3>
+                        <p>Measure your progress with adaptive quizzes, scenario-based evaluations, and detailed
+                            performance analytics.</p>
+                        <ul class="feature-list">
+                            <li>Personalized feedback loops</li>
+                            <li>Skill gap identification</li>
+                            <li>Mastery tracking</li>
+                        </ul>
+                        <button class="btn btn-text">Take Assessment &rarr;</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Labs Menu Area -->
+            <section id="labs-menu" class="page-section" style="max-width: 1200px; margin: 0 auto; padding: 40px 5%;">
+                <button class="btn btn-outline back-to-dash-btn" style="margin-bottom: 30px;">&larr; Back to
+                    Modules</button>
+                <div class="section-header">
+                    <h2>Interactive Labs</h2>
+                    <p>Select from 10 immersive tactical environments.</p>
+                </div>
+                <div class="features-grid" id="labs-grid">
+                    <!-- Javascript will populate 10 labs here -->
+                </div>
+            </section>
+
+            <!-- Scenarios Menu Area -->
+            <section id="scenarios-menu" class="page-section"
+                style="max-width: 1200px; margin: 0 auto; padding: 40px 5%;">
+                <button class="btn btn-outline back-to-dash-btn" style="margin-bottom: 30px;">&larr; Back to
+                    Modules</button>
+                <div class="section-header">
+                    <h2>Threat Scenarios</h2>
+                    <p>Select from 10 advanced persistent threat scenarios to respond to.</p>
+                </div>
+                <div class="features-grid" id="scenarios-grid">
+                    <!-- Javascript will populate 10 scenarios here -->
+                </div>
+            </section>
+
+            <!-- Interactive View Area (Hidden by default, shown via JS) -->
+            <section id="interactive-view" class="interactive-section page-section">
+                <div class="view-header">
+                    <button class="btn btn-outline back-btn">&larr; Back to Dashboard</button>
+                    <h2 id="view-title">Interactive Module</h2>
+                </div>
+
+                <div class="workspace-container">
+                    <!-- Terminal/Console Mockup -->
+                    <div class="terminal-window glass-panel">
+                        <div class="terminal-header">
+                            <div class="window-controls">
+                                <span class="control close"></span>
+                                <span class="control minimize"></span>
+                                <span class="control maximize"></span>
+                            </div>
+                            <div class="terminal-title">SecOps Terminal - root@kali:~</div>
+                        </div>
+                        <div class="terminal-body" id="terminal-output">
+                            <div class="term-line"><span class="prompt">root@kali:~#</span> ./start_simulation
+                                --module=labs</div>
+                            <div class="term-line sys-msg">Initializing virtual environment... [OK]</div>
+                            <div class="term-line sys-msg">Loading target configuration... [OK]</div>
+                            <div class="term-line sys-msg">Establishing secure tunnel... [OK]</div>
+                            <div class="term-line"><span class="prompt">root@kali:~#</span> nmap -sS -p- 192.168.1.100
+                            </div>
+                            <div class="term-line sys-msg">Starting Nmap 7.92 ( https://nmap.org ) at <span
+                                    id="current-time"></span></div>
+                            <div class="term-line blink-cursor">_</div>
+                        </div>
+                    </div>
+
+                    <!-- Side Info Panel -->
+                    <div class="side-panel glass-panel">
+                        <div class="panel-tabs">
+                            <button class="tab active" data-tab="instructions">Instructions</button>
+                            <button class="tab" data-tab="network">Topology</button>
+                        </div>
+                        <div class="panel-content" id="instructions-content">
+                            <h3>Lab Objective</h3>
+                            <p>Identify open ports and vulnerable services on the target machine (192.168.1.100).</p>
+
+                            <h4>Tasks:</h4>
+                            <div class="task-list">
+                                <label class="task-item">
+                                    <input type="checkbox" disabled>
+                                    <span>Run an initial port scan</span>
+                                </label>
+                                <label class="task-item">
+                                    <input type="checkbox" disabled>
+                                    <span>Identify the service on port 80</span>
+                                </label>
+                                <label class="task-item">
+                                    <input type="checkbox" disabled>
+                                    <span>Find the hidden directory</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes View Area -->
+            <section id="notes-view" class="page-section" style="max-width: 800px; margin: 0 auto; padding: 40px 5%;">
+                <button class="btn btn-outline back-to-curr-btn" style="margin-bottom: 30px;">&larr; Back to
+                    Curriculum</button>
+                <div class="glass-panel" style="padding: 40px;">
+                    <h2 id="note-title" style="margin-bottom: 25px; color: var(--text-primary); font-size: 2rem;"></h2>
+                    <div id="note-content"
+                        style="color: var(--text-secondary); line-height: 1.8; font-size: 1.05rem; white-space: pre-wrap;">
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="glass-panel">
+            <div class="footer-content">
+                <p>&copy; 2026 CyberSec Learning Portal. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
