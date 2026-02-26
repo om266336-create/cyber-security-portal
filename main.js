@@ -87,11 +87,139 @@ document.addEventListener('DOMContentLoaded', () => {
     const terminalLogic = {
         'nmap': '<div class="term-line sys-msg">Starting Nmap 7.92... <br>Discovered open port 80/tcp on 192.168.1.100<br>Discovered open port 22/tcp on 192.168.1.100</div>',
         'gobuster': '<div class="term-line sys-msg">Starting gobuster...<br>/admin-panel (Status: 403)<br>/hidden-flag (Status: 200)</div>',
-        'get_process_tree': '<div class="term-line sys-msg">Process Tree for 10.0.5.42:<br> - explorer.exe (1042)<br>   - malicious.exe (4011) [WARNING]<br>Hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</div>',
-        'block_ip': '<div class="term-line sys-msg">[OK] IP explicitly blocked at edge firewall.</div>',
-        'help': '<div class="term-line sys-msg">Available commands: support depends on context (e.g., nmap, gobuster, ls, get_process_tree).</div>',
-        'ls': '<div class="term-line sys-msg">Desktop&nbsp;&nbsp;Documents&nbsp;&nbsp;Downloads&nbsp;&nbsp;malicious.exe</div>'
+        'ping': '<div class="term-line sys-msg">64 bytes from target: icmp_seq=1 ttl=64 time=0.04 ms</div>',
+        'curl': '<div class="term-line sys-msg">HTTP/1.1 200 OK<br>Content-Type: text/html<br>...</div>',
+        'ls': '<div class="term-line sys-msg">Desktop&nbsp;&nbsp;Documents&nbsp;&nbsp;Downloads&nbsp;&nbsp;malicious.exe</div>',
+        'help': '<div class="term-line sys-msg">Available commands: ping, nmap, gobuster, ssh, ftp, curl, hydra, ls, clear, help</div>',
+        'clear': 'CLEAR_TERMINAL'
     };
+
+    // solutionRegistry: Centralized logic for all 20 interactive problems
+    const solutionRegistry = {
+        'labs-view-1': [
+            { match: ['ping', '10.10.1.10'], step: 1, resp: '<div class="term-line sys-msg">64 bytes from 10.10.1.10: icmp_seq=1 ttl=64 time=0.045 ms</div>' },
+            { match: ['nmap'], step: 2, resp: '<div class="term-line sys-msg">Starting Nmap 7.92...<br>PORT&nbsp;&nbsp;&nbsp;STATE&nbsp;SERVICE<br>21/tcp&nbsp;open&nbsp;&nbsp;ftp<br>22/tcp&nbsp;open&nbsp;&nbsp;ssh<br>80/tcp&nbsp;open&nbsp;&nbsp;http</div>' },
+            { match: ['nmap', '-sv'], step: 3, resp: '<div class="term-line sys-msg">PORT&nbsp;&nbsp;&nbsp;STATE&nbsp;SERVICE VERSION<br>21/tcp&nbsp;open&nbsp;&nbsp;ftp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vsFTPd 3.0.3<br>22/tcp&nbsp;open&nbsp;&nbsp;ssh&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OpenSSH 8.2p1<br>80/tcp&nbsp;open&nbsp;&nbsp;http&nbsp;&nbsp;&nbsp;&nbsp;Apache httpd 2.4.41</div>' },
+            { match: ['gobuster'], step: 4, resp: '<div class="term-line sys-msg">Found: /admin-panel (Status: 403)<br>Found: /hidden-flag (Status: 200)</div>' },
+            { match: ['/hidden-flag'], step: 5, resp: '<div class="term-line sys-msg">HTTP/1.1 200 OK<br>Clue: Check SSH banner. Flag part 1: {RECON}</div>' },
+            { match: ['ssh', '-v'], step: 6, resp: '<div class="term-line sys-msg">OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)</div>' },
+            { match: ['ftp', '10.10.1.10'], step: 7, resp: '<div class="term-line sys-msg">Connected to 10.10.1.10. 220 (vsFTPd 3.0.3) Login: anonymous... OK</div>' },
+            { match: ['curl', 'cat'], step: 8, resp: '<div class="term-line sys-msg">&lt;!-- Hint: hidden-flag folder --&gt;</div>' },
+            { match: ['hydra'], step: 9, resp: '<div class="term-line sys-msg">Hydra v9.2 starting... [21][ftp] host: 10.10.1.10 login: admin password: monkey123</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Flag submitted: COMPROMISED</div>' }
+        ],
+        'labs-view-2': [
+            { match: ['curl', '10.10.1.20'], step: 1, resp: '<div class="term-line sys-msg">HTTP/1.1 200 OK<br>Login Form Detected. Fields: user, pass</div>' },
+            { match: ['nmap'], step: 2, resp: '<div class="term-line sys-msg">Port 80 (HTTP) open. Apache 2.4.41. PHP 7.4.3.</div>' },
+            { match: ["' or 1=1 --"], step: 3, resp: '<div class="term-line sys-msg">Login Bypass Successful! Welcome Admin.</div>' },
+            { match: ['order by'], step: 4, resp: '<div class="term-line sys-msg">Query successful. Columns: 3</div>' },
+            { match: ['union select', 'version()'], step: 5, resp: '<div class="term-line sys-msg">Database Version: MySQL 8.0.23</div>' },
+            { match: ['table_name', 'information_schema'], step: 6, resp: '<div class="term-line sys-msg">Tables found: users, config, flags</div>' },
+            { match: ['from config'], step: 7, resp: '<div class="term-line sys-msg">Dumping config... site_admin_hash: 5f4dcc3b5aa765d61d8327deb882cf99</div>' },
+            { match: ['admin'], step: 8, resp: '<div class="term-line sys-msg">Admin credentials verified.</div>' },
+            { match: ['login', 'bypass'], step: 9, resp: '<div class="term-line sys-msg">Accessing protected admin dashboard...</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Flag submitted: SQL_MASTER_2024</div>' }
+        ],
+        'labs-view-3': [
+            { match: ['id'], step: 1, resp: '<div class="term-line sys-msg">uid=1001(www-data) gid=1001(www-data) groups=1001(www-data)</div>' },
+            { match: ['sudo -l'], step: 2, resp: '<div class="term-line sys-msg">User www-data may run the following commands: (ALL) NOPASSWD: /usr/bin/python3</div>' },
+            { match: ['find', '-perm'], step: 3, resp: '<div class="term-line sys-msg">SUID binaries found: /usr/bin/passwd, /usr/lib/e2fsprogs/e2scrub_all</div>' },
+            { match: ['ls -la /etc/passwd'], step: 5, resp: '<div class="term-line sys-msg">-rw-rw-rw- 1 root root 2341 Feb 22 10:00 /etc/passwd [WRITABLE]</div>' },
+            { match: ['python3', 'import os'], step: 7, resp: '<div class="term-line sys-msg">Spawning root shell... #</div>' },
+            { match: ['cat /etc/shadow'], step: 8, resp: '<div class="term-line sys-msg">root:$6$lD3f...:18654:0:99999:7:::</div>' },
+            { match: ['whoami'], step: 9, resp: '<div class="term-line sys-msg">root</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Root verified: ESCALATED_PRO</div>' }
+        ],
+        'labs-view-4': [
+            { match: ['nmap', '22'], step: 1, resp: '<div class="term-line sys-msg">Port 22/tcp open&nbsp;&nbsp;ssh&nbsp;&nbsp;OpenSSH 7.6p1</div>' },
+            { match: ['ssh', '-v'], step: 2, resp: '<div class="term-line sys-msg">Banner: SSH-2.0-OpenSSH_7.6p1</div>' },
+            { match: ['rockyou.txt'], step: 3, resp: '<div class="term-line sys-msg">Wordlist selected: /usr/share/wordlists/rockyou.txt</div>' },
+            { match: ['-l admin'], step: 4, resp: '<div class="term-line sys-msg">Hydra: targeting user admin</div>' },
+            { match: ['hydra', '-t'], step: 5, resp: '<div class="term-line sys-msg">Starting threads... attacking 172.16.1.15</div>' },
+            { match: ['wait', 'retry'], step: 6, resp: '<div class="term-line sys-msg">Socket error... retrying in 5s...</div>' },
+            { match: ['password', 'found'], step: 7, resp: '<div class="term-line sys-msg">[22][ssh] host: 172.16.1.15&nbsp;&nbsp;&nbsp;login: admin&nbsp;&nbsp;&nbsp;password: spring2023</div>' },
+            { match: ['ssh', 'admin@'], step: 8, resp: '<div class="term-line sys-msg">Authenticated. Welcome to legacy-srv-01.</div>' },
+            { match: ['cd', 'ls'], step: 9, resp: '<div class="term-line sys-msg">Desktop&nbsp;&nbsp;Documents&nbsp;&nbsp;flag.txt</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Creds verified: BRUTE_REVENGE</div>' }
+        ],
+        'labs-view-5': [
+            { match: ['airmon-ng start'], step: 1, resp: '<div class="term-line sys-msg">Monitor mode enabled on wlan0mon.</div>' },
+            { match: ['airodump-ng wlan0mon'], step: 2, resp: '<div class="term-line sys-msg">BSSID: 00:11:22:33:44:55&nbsp;&nbsp;CH: 6&nbsp;&nbsp;ESSID: CorpData_Secure</div>' },
+            { match: ['-c 6', '--bssid'], step: 3, resp: '<div class="term-line sys-msg">Filtering traffic for BSSID 00:11:22:33:44:55</div>' },
+            { match: ['aireplay-ng', '-0'], step: 5, resp: '<div class="term-line sys-msg">Sending Deauth to station 00:AA:BB:CC:DD:EE...</div>' },
+            { match: ['handshake'], step: 6, resp: '<div class="term-line sys-msg">WPA handshake captured for 00:11:22:33:44:55</div>' },
+            { match: ['hashcat', '-m 22000'], step: 9, resp: '<div class="term-line sys-msg">Recovered password: corp_wifi_secure_2023</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Handshake verified: WIFI_CRACKER</div>' }
+        ],
+        'labs-view-6': [
+            { match: ['mmls'], step: 1, resp: '<div class="term-line sys-msg">Slot&nbsp;&nbsp;&nbsp;&nbsp;Start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;End&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Description<br>002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0000002048&nbsp;0000524287&nbsp;Win95 FAT32</div>' },
+            { match: ['fls', '-r'], step: 2, resp: '<div class="term-line sys-msg">r/r 42:&nbsp;&nbsp;deleted_plan.pdf.txt</div>' },
+            { match: ['History'], step: 3, resp: '<div class="term-line sys-msg">Visited: http://exfil-server.xyz/upload</div>' },
+            { match: ['exiftool'], step: 4, resp: '<div class="term-line sys-msg">GPS: 34.0522 N, 118.2437 W (Los Angeles)</div>' },
+            { match: ['binwalk'], step: 5, resp: '<div class="term-line sys-msg">RAR archive data found at offset 0x4000</div>' },
+            { match: ['sha256sum'], step: 7, resp: '<div class="term-line sys-msg">Hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Forensic report verified: DIGITAL_DUST</div>' }
+        ],
+        'labs-view-7': [
+            { match: ['ss -tp'], step: 1, resp: '<div class="term-line sys-msg">ESTAB&nbsp;&nbsp;10.0.0.5:54321&nbsp;&nbsp;10.0.0.100:4444&nbsp;&nbsp;users:(("nc",pid=441,fd=3))</div>' },
+            { match: ['tcpdump', 'port 4444'], step: 2, resp: '<div class="term-line sys-msg">Capturing packets on eth0... 10.0.0.5 -> 10.0.0.100 [PUSH, ACK]</div>' },
+            { match: ['-w capture.pcap'], step: 3, resp: '<div class="term-line sys-msg">Packets saved to capture.pcap</div>' },
+            { match: ['xxd', 'capture.pcap'], step: 4, resp: '<div class="term-line sys-msg">00000000: 4745 5420 2f68 6561 7274 6265 6174 2048  GET /heartbeat H</div>' },
+            { match: ['stats', 'beaconing'], step: 5, resp: '<div class="term-line sys-msg">Frequency detected: Every 60 seconds (Jitter: 5%)</div>' },
+            { match: ['iptables', '-A INPUT', '-j DROP'], step: 9, resp: '<div class="term-line sys-msg">C2 IP blocked in firewall. Connection reset.</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Traffic mitigated: PCAP_WIZARD</div>' }
+        ],
+        'labs-view-8': [
+            { match: ['nmap', '--script ldap'], step: 2, resp: '<div class="term-line sys-msg">LDAP Enumeration: forestRoot: CORP.LOCAL, domainFunctionality: Windows 2016</div>' },
+            { match: ['rpcclient', 'enumdomusers'], step: 3, resp: '<div class="term-line sys-msg">user:[Administrator] rid:[0x1f4]<br>user:[bkup_service] rid:[0x451]</div>' },
+            { match: ['GetNPUsers.py'], step: 7, resp: '<div class="term-line sys-msg">Hash: $krb5asrep$23$bkup_service@CORP.LOCAL:...</div>' },
+            { match: ['bloodhound'], step: 5, resp: '<div class="term-line sys-msg">Ingesting zip... Shortest path to DA: bkup_service -> Domain Admins</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] AD Controlled: PTH_MASTER</div>' }
+        ],
+        'labs-view-9': [
+            { match: ['sha256sum'], step: 1, resp: '<div class="term-line sys-msg">Hash: aabbccddeeff00112233445566778899</div>' },
+            { match: ['strings'], step: 2, resp: '<div class="term-line sys-msg">KERNEL32.dll&nbsp;&nbsp;InternetOpenA&nbsp;&nbsp;InternetConnectA&nbsp;&nbsp;http://evil.cc/payload.exe</div>' },
+            { match: ['regshot'], step: 4, resp: '<div class="term-line sys-msg">HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -> malicious.exe</div>' },
+            { match: ['get_process_tree'], step: 7, resp: '<div class="term-line sys-msg">malicious.exe (PID: 4011) parent: explorer.exe</div>' },
+            { match: ['wireshark'], step: 8, resp: '<div class="term-line sys-msg">Packet calling out to 185.112.5.42:80... [REDACTED]</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Malware signature: Vbox_Bypass_01</div>' }
+        ],
+        'labs-view-10': [
+            { match: ['aws iam list-users'], step: 1, resp: '<div class="term-line sys-msg">Users: admin, dev-user, infra-bot</div>' },
+            { match: ['list-attached-user-policies'], step: 2, resp: '<div class="term-line sys-msg">infra-bot: AdministratorAccess [VULNERABLE]</div>' },
+            { match: ['aws s3 ls'], step: 3, resp: '<div class="term-line sys-msg">Bucket: internal-docs-public [PUBLIC ACCESS]</div>' },
+            { match: ['describe-security-groups'], step: 4, resp: '<div class="term-line sys-msg">SG sg-01: Rule 0.0.0.0/0 port 22 [OPEN]</div>' },
+            { match: ['cloudtrail'], step: 6, resp: '<div class="term-line sys-msg">Anomalous CreateUser call from unauthorized IP: 185.x.x.x</div>' },
+            { match: ['submit_flag'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Cloud Hardened: AWS_SHIELD</div>' }
+        ]
+    };
+
+    // Add Threat Scenarios (1-10) to solutionRegistry dynamically
+    for (let i = 1; i <= 10; i++) {
+        solutionRegistry[`threats-view-${i}`] = [
+            { match: ['siem', 'alert'], step: 1, resp: `<div class="term-line sys-msg">Alert ${i}00: Large volume exfiltration detected on 10.0.5.${i}</div>` },
+            { match: ['isolate', `10.0.5.${i}`], step: 2, resp: `<div class="term-line sys-msg">Host 10.0.5.${i} isolated from the network.</div>` },
+            { match: ['lateral', 'halt'], step: 3, resp: '<div class="term-line sys-msg">SMB traffic restricted on segment VLAN 1' + (i + 10) + '.</div>' },
+            { match: ['get_process_tree'], step: 4, resp: '<div class="term-line sys-msg">Process Tree: svchost.exe -> powershell.exe -> nc.exe</div>' },
+            { match: ['upload', 'hash'], step: 5, resp: '<div class="term-line sys-msg">Hash e3b0c... documented in ThreatDB. Matching actor: FIN7.</div>' },
+            { match: ['logs', 'search'], step: 6, resp: '<div class="term-line sys-msg">No other compromised hosts found in Sector ' + i + '.</div>' },
+            { match: ['phishing', 'email'], step: 7, resp: '<div class="term-line sys-msg">Vector identified: Invoice_Report.doc.xlsm sent to marketing.</div>' },
+            { match: ['block_ip'], step: 8, resp: '<div class="term-line sys-msg">External C2 IP blocked at edge firewall.</div>' },
+            { match: ['restore', 'backup'], step: 9, resp: '<div class="term-line sys-msg">Rolling back Sector ' + i + ' storage to snapshot: 20260225.0400</div>' },
+            { match: ['traffic', 'verify'], step: 10, resp: '<div class="term-line sys-msg" style="color:var(--accent-green);">[SUCCESS] Threat Mitigated for Sector ' + i + '.</div>' }
+        ];
+    }
+
+    function updateLabTask(step) {
+        const taskItems = document.querySelectorAll('.task-item');
+        if (taskItems[step - 1]) {
+            const checkbox = taskItems[step - 1].querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = true;
+                taskItems[step - 1].classList.add('completed');
+            }
+        }
+    }
 
     function attachTerminalInput() {
         const inputField = document.querySelector('.terminal-input');
@@ -99,17 +227,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
         inputField.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
-                const command = this.value.trim().toLowerCase();
+                const commandText = this.value.trim();
+                const parts = commandText.split(' ');
+                const baseCommand = parts[0].toLowerCase();
+                const command = commandText.toLowerCase();
                 const parentLine = this.parentElement;
 
                 // Freeze current input line
-                parentLine.innerHTML = `<span class="prompt">root@kali:~#</span> ${this.value}`;
+                parentLine.innerHTML = `<span class="prompt">root@kali:~#</span> ${commandText}`;
 
-                // Ensure output goes directly above new input line
-                if (command) {
-                    let response = terminalLogic[command] || `<div class="term-line sys-msg">bash: ${command}: command not found</div>`;
-                    // For process tree specifically
-                    if (command.startsWith('get_process_tree')) response = terminalLogic['get_process_tree'];
+                if (baseCommand === 'clear') {
+                    terminalOutput.innerHTML = '';
+                } else if (commandText) {
+                    let response = terminalLogic[baseCommand] || `<div class="term-line sys-msg">bash: ${baseCommand}: command not found</div>`;
+                    let matchedTask = false;
+
+                    // solutionRegistry matching
+                    const rules = solutionRegistry[currentViewType];
+                    if (rules) {
+                        for (let rule of rules) {
+                            // Check if ALL match terms are present in the command
+                            const isMatch = rule.match.every(term => command.includes(term.toLowerCase()));
+                            if (isMatch) {
+                                response = rule.resp;
+                                updateLabTask(rule.step);
+                                matchedTask = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Fallback to generic logic if no task match found
+                    if (!matchedTask) {
+                        if (commandText.startsWith('get_process_tree')) response = '<div class="term-line sys-msg">Process Tree: explorer.exe (1042) -> malicious.exe (4011) [WARNING]</div>';
+                        if (commandText.startsWith('block_ip')) response = '<div class="term-line sys-msg">[OK] IP explicitly blocked at edge firewall.</div>';
+                    }
 
                     terminalOutput.insertAdjacentHTML('beforeend', response);
                 }
@@ -122,10 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `);
 
-                // Re-attach listener to new input
-                attachTerminalInput();
-
-                // Scroll to bottom
+                attachTerminalInput(); // Recursive attach to new input
                 terminalOutput.scrollTop = terminalOutput.scrollHeight;
             }
         });

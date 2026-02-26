@@ -734,6 +734,12 @@ h4 {
     color: var(--text-primary);
 }
 
+.task-item.completed span {
+    text-decoration: line-through;
+    color: var(--accent-green);
+    opacity: 0.6;
+}
+
 /* Footer */
 footer {
     padding: 40px 5%;
